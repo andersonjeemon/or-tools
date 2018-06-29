@@ -219,7 +219,7 @@ include $(OR_ROOT)makefiles/Makefile.gen.mk
 
 OR_TOOLS_LIBS = $(LIB_DIR)/$(LIB_PREFIX)ortools.$L
 OR_TOOLS_LNK += $(PRE_LIB)ortools$(POST_LIB)
-ortoolslibs: third_party_check $(MISSING_BUILD_DIRECTORIES) $(OR_TOOLS_LIBS)
+ortoolslibs: third_party_check $(OR_TOOLS_LIBS) | $(MISSING_BUILD_DIRECTORIES)
 
 # Specific libraries for examples, and flatzinc.
 CVRPTW_LIBS = $(LIB_DIR)/$(LIB_PREFIX)cvrptw_lib.$L
@@ -327,7 +327,7 @@ CVRPTW_OBJS= $(OBJ_DIR)/cvrptw_lib.$O
 $(CVRPTW_OBJS): $(EX_DIR)/cpp/cvrptw_lib.cc $(EX_DIR)/cpp/cvrptw_lib.h 	$(CP_DEPS) $(SRC_DIR)/ortools/constraint_solver/routing.h
 	$(CCC) $(CFLAGS) -c $(EX_DIR)$Scpp/cvrptw_lib.cc $(OBJ_OUT)$(OBJ_DIR)$Scvrptw_lib.$O
 
-$(CVRPTW_LIBS): ortoolslibs $(CVRPTW_OBJS)
+$(CVRPTW_LIBS): $(OR_TOOLS_LIBS) $(CVRPTW_OBJS)
 	$(LINK_CMD) \
  $(CVRPTW_LDFLAGS) \
  $(LD_OUT)$(LIB_DIR)$S$(LIB_PREFIX)cvrptw_lib.$L \
@@ -340,7 +340,7 @@ DIMACS_OBJS= $(OBJ_DIR)/parse_dimacs_assignment.$O
 $(DIMACS_OBJS): $(EX_DIR)/cpp/parse_dimacs_assignment.cc
 	$(CCC) $(CFLAGS) -c $(EX_DIR)$Scpp/parse_dimacs_assignment.cc $(OBJ_OUT)$(OBJ_DIR)$Sparse_dimacs_assignment.$O
 
-$(DIMACS_LIBS): ortoolslibs $(DIMACS_OBJS)
+$(DIMACS_LIBS): $(OR_TOOLS_LIBS) $(DIMACS_OBJS)
 	$(LINK_CMD) \
  $(DIMACS_LDFLAGS) \
  $(LD_OUT)$(LIB_DIR)$S$(LIB_PREFIX)dimacs.$L \
@@ -361,7 +361,7 @@ $(OBJ_DIR)/fap_parser.$O: $(EX_DIR)/cpp/fap_parser.cc
 $(OBJ_DIR)/fap_utilities.$O: $(EX_DIR)/cpp/fap_utilities.cc
 	$(CCC) $(CFLAGS) -c $(EX_DIR)$Scpp$Sfap_utilities.cc $(OBJ_OUT)$(OBJ_DIR)$Sfap_utilities.$O
 
-$(FAP_LIBS): ortoolslibs $(FAP_OBJS)
+$(FAP_LIBS): $(OR_TOOLS_LIBS) $(FAP_OBJS)
 	$(LINK_CMD) \
  $(FAP_LDFLAGS) \
  $(LD_OUT)$(LIB_DIR)$S$(LIB_PREFIX)fap.$L \
@@ -436,7 +436,7 @@ $(OBJ_DIR)/flatzinc/solver_data.$O: $(SRC_DIR)/ortools/flatzinc/solver_data.cc $
 $(OBJ_DIR)/flatzinc/solver_util.$O: $(SRC_DIR)/ortools/flatzinc/solver_util.cc $(FLATZINC_DEPS)
 	$(CCC) $(CFLAGS) -c $(SRC_DIR)$Sortools$Sflatzinc$Ssolver_util.cc $(OBJ_OUT)$(OBJ_DIR)$Sflatzinc$Ssolver_util.$O
 
-$(FLATZINC_LIBS): ortoolslibs $(FLATZINC_OBJS)
+$(FLATZINC_LIBS): $(OR_TOOLS_LIBS) $(FLATZINC_OBJS)
 	$(LINK_CMD) \
  $(FLATZINK_LDFLAGS) \
  $(LD_OUT)$(LIB_DIR)$S$(LIB_PREFIX)fz.$L \
@@ -609,7 +609,7 @@ $(BIN_DIR)/multidim_knapsack$E: $(OR_TOOLS_LIBS) $(OBJ_DIR)/multidim_knapsack.$O
 $(OBJ_DIR)/network_routing.$O: $(EX_DIR)/cpp/network_routing.cc $(CP_DEPS)
 	$(CCC) $(CFLAGS) -c $(EX_DIR)$Scpp/network_routing.cc $(OBJ_OUT)$(OBJ_DIR)$Snetwork_routing.$O
 
-$(BIN_DIR)/network_routing$E: $(OR_TOOLS_LIBS) $(OR_TOOLS_LIBS) $(OBJ_DIR)/network_routing.$O
+$(BIN_DIR)/network_routing$E: $(OR_TOOLS_LIBS) $(OBJ_DIR)/network_routing.$O
 	$(CCC) $(CFLAGS) $(OBJ_DIR)/network_routing.$O $(OR_TOOLS_LNK) $(OR_TOOLS_LNK) $(OR_TOOLS_LDFLAGS) $(EXE_OUT)$(BIN_DIR)$Snetwork_routing$E
 
 $(OBJ_DIR)/nqueens.$O: $(EX_DIR)/cpp/nqueens.cc $(CP_DEPS)
