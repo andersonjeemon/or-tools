@@ -34,6 +34,8 @@ else
   endif
 endif
 
+# Delete all implicit rules to speed up makefile
+.SUFFIXES:
 # Read version.
 include $(OR_ROOT)Version.txt
 
